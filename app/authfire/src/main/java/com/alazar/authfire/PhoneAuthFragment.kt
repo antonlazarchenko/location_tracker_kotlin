@@ -25,7 +25,7 @@ class PhoneAuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.switchAuthBtn.setOnClickListener {
+        binding.btnSwitchAuth.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(
                     android.R.anim.slide_in_left,
