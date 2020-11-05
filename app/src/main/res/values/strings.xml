@@ -52,5 +52,6 @@
     <string name="label_multi_factor">Multi-Factor Authentication</string>
     <string name="auth_with_phone_number">click to auth with phone</string>
     <string name="auth_with_email">click to auth with email</string>
+    <string name="app_name">Tracker</string>
 
 </resources>

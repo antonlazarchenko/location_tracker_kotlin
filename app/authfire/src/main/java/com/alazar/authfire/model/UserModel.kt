@@ -7,8 +7,17 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class UserModel : UserModelInterface {
+class UserModel @Inject constructor() {
+
+    fun interface AuthEmailCallback {
+        fun onReady(isAuthorized: Boolean)
+    }
+
+    fun interface AuthPhoneCallback {
+        fun onReady(phoneAuthState: Int)
+    }
 
     companion object {
         private val TAG = UserModel::class.simpleName
@@ -20,23 +29,23 @@ class UserModel : UserModelInterface {
     private var mVerificationId: String? = ""
     private lateinit var mResendToken: PhoneAuthProvider.ForceResendingToken
 
-    override fun isAuthorized(): Boolean {
+    fun isAuthorized(): Boolean {
 
         return auth.uid != null
     }
 
-    override fun getUserId(): String? {
+    fun getUserId(): String? {
         return auth.uid
     }
 
-    override fun signOut() {
+    fun signOut() {
         auth.signOut()
     }
 
-    override fun createUserWithEmailAndPassword(
+    fun createUserWithEmailAndPassword(
         email: String,
         password: String,
-        callback: UserModelInterface.AuthEmailCallback
+        callback: AuthEmailCallback
     ) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
@@ -50,10 +59,10 @@ class UserModel : UserModelInterface {
             }
     }
 
-    override fun signInUserWithEmailAndPassword(
+    fun signInUserWithEmailAndPassword(
         email: String,
         password: String,
-        callback: UserModelInterface.AuthEmailCallback
+        callback: AuthEmailCallback
     ) {
         Log.d(TAG, "signIn:$email")
 
@@ -69,9 +78,9 @@ class UserModel : UserModelInterface {
             }
     }
 
-    override fun startPhoneNumberVerification(
+    fun startPhoneNumberVerification(
         phoneNumber: String,
-        callback: UserModelInterface.AuthPhoneCallback
+        callback: AuthPhoneCallback
     ) {
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber)
@@ -83,9 +92,9 @@ class UserModel : UserModelInterface {
     }
 
 
-    override fun resendVerificationCode(
+    fun resendVerificationCode(
         phoneNumber: String,
-        callback: UserModelInterface.AuthPhoneCallback
+        callback: AuthPhoneCallback
     ) {
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber)
@@ -96,9 +105,9 @@ class UserModel : UserModelInterface {
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
-    override fun verifyPhoneNumberWithCode(
+    fun verifyPhoneNumberWithCode(
         code: String,
-        callback: UserModelInterface.AuthPhoneCallback
+        callback: AuthPhoneCallback
     ) {
         val credential: PhoneAuthCredential =
             PhoneAuthProvider.getCredential(mVerificationId!!, code)
@@ -115,7 +124,7 @@ class UserModel : UserModelInterface {
     }
 
 
-    inner class PhoneAuthVerificationHandler(private val callback: UserModelInterface.AuthPhoneCallback) :
+    inner class PhoneAuthVerificationHandler(private val callback: AuthPhoneCallback) :
         PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
         override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {

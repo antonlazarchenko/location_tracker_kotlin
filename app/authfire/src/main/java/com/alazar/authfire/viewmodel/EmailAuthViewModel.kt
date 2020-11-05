@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alazar.authfire.model.UserModel
-import com.alazar.authfire.model.UserModelInterface
+import javax.inject.Inject
 
 
-class EmailAuthViewModel : ViewModel() {
-    private val model: UserModelInterface = UserModel()
+class EmailAuthViewModel @Inject constructor(userModel: UserModel) : ViewModel() {
+
+    var model: UserModel = userModel
 
     private val isAuthenticated = MutableLiveData<Boolean>()
 

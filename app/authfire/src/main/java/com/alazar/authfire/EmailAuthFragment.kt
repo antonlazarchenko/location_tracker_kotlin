@@ -10,6 +10,7 @@ import android.widget.Toast.makeText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.databinding.FragmentEmailBinding
+import com.alazar.authfire.di.ViewModelFactory
 import com.alazar.authfire.util.Validator
 import com.alazar.authfire.viewmodel.EmailAuthViewModel
 
@@ -36,7 +37,8 @@ class EmailAuthFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity()).get(EmailAuthViewModel::class.java)
+        val viewModelFactory = ViewModelFactory()
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(EmailAuthViewModel::class.java)
 
         viewModel.getIsAuthenticated().observe(requireActivity(), {
             if (it)
