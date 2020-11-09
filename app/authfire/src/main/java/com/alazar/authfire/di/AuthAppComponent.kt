@@ -24,9 +24,7 @@ interface AuthAppComponent {
 class AuthAppModule {
 
     @Provides
-    fun provideUserModel(): UserModel {
-        return UserModel()
-    }
+    fun provideUserModel(): UserModel = UserModel()
 
 }
 
