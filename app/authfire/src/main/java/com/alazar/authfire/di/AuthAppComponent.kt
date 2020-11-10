@@ -2,6 +2,7 @@ package com.alazar.authfire.di
 
 import android.app.Application
 import com.alazar.authfire.EmailAuthFragment
+import com.alazar.authfire.PhoneAuthFragment
 import com.alazar.authfire.model.UserModel
 import dagger.Component
 import dagger.Module
@@ -18,6 +19,7 @@ import javax.inject.Singleton
 interface AuthAppComponent {
     fun inject(viewModelFactory: ViewModelFactory)
     fun inject(fragment: EmailAuthFragment)
+    fun inject(fragment: PhoneAuthFragment)
 }
 
 @Module

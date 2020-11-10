@@ -1,13 +1,11 @@
 package com.alazar.authfire
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import android.widget.Toast.makeText
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.databinding.FragmentEmailBinding
 import com.alazar.authfire.di.ViewModelFactory
@@ -15,10 +13,7 @@ import com.alazar.authfire.util.Validator
 import com.alazar.authfire.viewmodel.EmailAuthViewModel
 
 
-class EmailAuthFragment : Fragment(), View.OnClickListener {
-    companion object {
-        private val TAG = EmailAuthFragment::class.simpleName
-    }
+class EmailAuthFragment : BaseAuthFragment(), View.OnClickListener {
 
     private var _binding: FragmentEmailBinding? = null
 
@@ -38,9 +33,14 @@ class EmailAuthFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModelFactory = ViewModelFactory()
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(EmailAuthViewModel::class.java)
+        viewModel = ViewModelProvider(
+            requireActivity(),
+            viewModelFactory
+        ).get(EmailAuthViewModel::class.java)
 
         viewModel.getIsAuthenticated().observe(requireActivity(), {
+            binding.progressBar.visibility = View.INVISIBLE
+
             if (it)
                 makeText(context, "AUTH SUCCESS", Toast.LENGTH_SHORT).show()
             else
@@ -60,6 +60,7 @@ class EmailAuthFragment : Fragment(), View.OnClickListener {
                     showToast(getString(R.string.form_incorrect))
                     return
                 }
+                binding.progressBar.visibility = View.VISIBLE
                 viewModel.signIn(
                     binding.fieldEmail.text.toString().trim(),
                     binding.fieldPassword.text.toString().trim()
@@ -70,6 +71,7 @@ class EmailAuthFragment : Fragment(), View.OnClickListener {
                     showToast(getString(R.string.form_incorrect))
                     return
                 }
+                binding.progressBar.visibility = View.VISIBLE
                 viewModel.createAccount(
                     binding.fieldEmail.text.toString().trim(),
                     binding.fieldPassword.text.toString().trim()
@@ -110,10 +112,4 @@ class EmailAuthFragment : Fragment(), View.OnClickListener {
         return valid
     }
 
-
-    private fun showToast(string: String?) {
-        val t = makeText(context, string, Toast.LENGTH_SHORT)
-        t.setGravity(Gravity.CENTER, 0, 0)
-        t.show()
-    }
 }

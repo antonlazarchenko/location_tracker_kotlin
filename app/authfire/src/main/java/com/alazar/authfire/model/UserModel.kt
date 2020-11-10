@@ -1,5 +1,6 @@
 package com.alazar.authfire.model
 
+import android.app.Activity
 import android.util.Log
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -25,7 +26,6 @@ class UserModel @Inject constructor() {
 
     private val auth: FirebaseAuth = Firebase.auth
 
-    private var mVerificationInProgress = false
     private var mVerificationId: String? = ""
     private lateinit var mResendToken: PhoneAuthProvider.ForceResendingToken
 
@@ -78,22 +78,26 @@ class UserModel @Inject constructor() {
             }
     }
 
+
     fun startPhoneNumberVerification(
         phoneNumber: String,
+        activity: Activity,
         callback: AuthPhoneCallback
     ) {
+        auth.signOut()
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber)
             .setTimeout(60L, TimeUnit.SECONDS)
             .setCallbacks(PhoneAuthVerificationHandler(callback))
+            .setActivity(activity)
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
 
     }
 
-
     fun resendVerificationCode(
         phoneNumber: String,
+        activity: Activity,
         callback: AuthPhoneCallback
     ) {
         val options = PhoneAuthOptions.newBuilder(auth)
@@ -101,6 +105,7 @@ class UserModel @Inject constructor() {
             .setTimeout(60L, TimeUnit.SECONDS)
             .setCallbacks(PhoneAuthVerificationHandler(callback))
             .setForceResendingToken(mResendToken)
+            .setActivity(activity)
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
@@ -129,13 +134,11 @@ class UserModel @Inject constructor() {
 
         override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
             Log.d(TAG, "onVerificationCompleted:$phoneAuthCredential")
-            mVerificationInProgress = false
             callback.onReady(PhoneAuthState.STATE_VERIFY_SUCCESS)
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
             Log.w(TAG, "onVerificationFailed", e)
-            mVerificationInProgress = false
             if (e is FirebaseAuthInvalidCredentialsException) {
                 callback.onReady(PhoneAuthState.STATE_VERIFY_FAILED) //Invalid phone number
             } else if (e is FirebaseTooManyRequestsException) {
