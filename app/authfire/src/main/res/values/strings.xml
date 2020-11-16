@@ -44,8 +44,8 @@
     <string name="status_sign_in_failed">Sign-in failed</string>
     <string name="instant_validation">(instant validation)</string>
 
-    <string name="emailpassword_title_text">Auth with email and password or</string>
-    <string name="phone_title_text">Auth with phone number or</string>
+    <string name="emailpassword_title_text">Auth with email and password</string>
+    <string name="phone_title_text">Auth with phone number</string>
 
     <string name="reload">Reload</string>
 
