@@ -1,18 +1,22 @@
 package com.alazar.authfire.di
 
 import android.app.Application
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.EmailAuthFragment
 import com.alazar.authfire.PhoneAuthFragment
-import com.alazar.authfire.model.UserModel
+import com.alazar.authfire.viewmodel.EmailAuthViewModel
+import com.alazar.authfire.viewmodel.PhoneAuthViewModel
+import dagger.Binds
 import dagger.Component
 import dagger.Module
-import dagger.Provides
+import dagger.multibindings.IntoMap
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [
-        AuthAppModule::class
+        FactoryModule::class,
     ]
 )
 
@@ -23,10 +27,20 @@ interface AuthAppComponent {
 }
 
 @Module
-class AuthAppModule {
+abstract class FactoryModule {
 
-    @Provides
-    fun provideUserModel(): UserModel = UserModel()
+    @Binds
+    @IntoMap
+    @ViewModelKey(EmailAuthViewModel::class)
+    internal abstract fun provideEmailAuthViewModel(viewModel: EmailAuthViewModel) : ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PhoneAuthViewModel::class)
+    internal abstract fun providePhoneAuthViewModel(viewModel: PhoneAuthViewModel) : ViewModel
+
+    @Binds
+    internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 
 }
 

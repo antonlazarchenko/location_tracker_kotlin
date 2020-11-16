@@ -8,9 +8,10 @@ import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.databinding.FragmentEmailBinding
-import com.alazar.authfire.di.ViewModelFactory
+import com.alazar.authfire.di.AuthApp
 import com.alazar.authfire.util.Validator
 import com.alazar.authfire.viewmodel.EmailAuthViewModel
+import javax.inject.Inject
 
 
 class EmailAuthFragment : BaseAuthFragment(), View.OnClickListener {
@@ -20,6 +21,9 @@ class EmailAuthFragment : BaseAuthFragment(), View.OnClickListener {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: EmailAuthViewModel
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +36,8 @@ class EmailAuthFragment : BaseAuthFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModelFactory = ViewModelFactory()
+        AuthApp().getComponent().inject(this)
+
         viewModel = ViewModelProvider(
             requireActivity(),
             viewModelFactory

@@ -7,10 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.databinding.FragmentPhoneBinding
-import com.alazar.authfire.di.ViewModelFactory
+import com.alazar.authfire.di.AuthApp
 import com.alazar.authfire.model.PhoneAuthState
 import com.alazar.authfire.util.Validator
 import com.alazar.authfire.viewmodel.PhoneAuthViewModel
+import javax.inject.Inject
 
 
 class PhoneAuthFragment : BaseAuthFragment(), View.OnClickListener {
@@ -20,6 +21,9 @@ class PhoneAuthFragment : BaseAuthFragment(), View.OnClickListener {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: PhoneAuthViewModel
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,9 +36,10 @@ class PhoneAuthFragment : BaseAuthFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        AuthApp().getComponent().inject(this)
+
         updateUI(PhoneAuthState.STATE_INITIALIZED)
 
-        val viewModelFactory = ViewModelFactory()
         viewModel = ViewModelProvider(
             requireActivity(),
             viewModelFactory
