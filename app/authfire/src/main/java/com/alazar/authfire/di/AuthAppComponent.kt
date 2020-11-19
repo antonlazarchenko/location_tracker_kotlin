@@ -7,14 +7,16 @@ import com.alazar.authfire.EmailAuthFragment
 import com.alazar.authfire.PhoneAuthFragment
 import com.alazar.authfire.viewmodel.EmailAuthViewModel
 import com.alazar.authfire.viewmodel.PhoneAuthViewModel
+import com.alazar.base.di.BaseComponent
+import com.alazar.base.di.DaggerBaseComponent
 import dagger.Binds
 import dagger.Component
 import dagger.Module
 import dagger.multibindings.IntoMap
-import javax.inject.Singleton
 
-@Singleton
+@AuthScope
 @Component(
+    dependencies = [BaseComponent::class],
     modules = [
         FactoryModule::class,
     ]
@@ -59,6 +61,7 @@ class AuthApp : Application() {
     private fun initDaggerComponent() {
         appComponent = DaggerAuthAppComponent
             .builder()
+            .baseComponent(DaggerBaseComponent.builder().build())
             .build()
     }
 }

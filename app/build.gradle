@@ -35,6 +35,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    implementation project(path: ':app:base')
+    implementation project(path: ':app:authfire')
+
     implementation libs.kotlin
     implementation libs.core
     implementation libs.appcompat
