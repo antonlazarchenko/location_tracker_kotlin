@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.alazar.authfire.model.UserModel
 import javax.inject.Inject
 
-class PhoneAuthViewModel @Inject constructor(userModel: UserModel) : ViewModel()  {
+class PhoneViewModel @Inject constructor(userModel: UserModel) : ViewModel()  {
     var model: UserModel = userModel
 
     private val status = MutableLiveData<Int>()

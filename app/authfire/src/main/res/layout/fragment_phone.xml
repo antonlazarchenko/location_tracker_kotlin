@@ -5,7 +5,7 @@
     android:id="@+id/PhoneFragmentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PhoneAuthFragment">
+    tools:context=".PhoneFragment">
 
     <ProgressBar
         android:id="@+id/progressBar"

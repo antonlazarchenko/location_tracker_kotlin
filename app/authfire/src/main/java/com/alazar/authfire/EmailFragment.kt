@@ -10,17 +10,18 @@ import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.databinding.FragmentEmailBinding
 import com.alazar.authfire.di.AuthApp
 import com.alazar.authfire.util.Validator
-import com.alazar.authfire.viewmodel.EmailAuthViewModel
+import com.alazar.authfire.viewmodel.EmailViewModel
+import com.alazar.base.BaseFragment
 import javax.inject.Inject
 
 
-class EmailAuthFragment : BaseAuthFragment(), View.OnClickListener {
+class EmailFragment : BaseFragment(), View.OnClickListener {
 
     private var _binding: FragmentEmailBinding? = null
 
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: EmailAuthViewModel
+    private lateinit var viewModel: EmailViewModel
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -41,7 +42,7 @@ class EmailAuthFragment : BaseAuthFragment(), View.OnClickListener {
         viewModel = ViewModelProvider(
             requireActivity(),
             viewModelFactory
-        ).get(EmailAuthViewModel::class.java)
+        ).get(EmailViewModel::class.java)
 
         viewModel.getIsAuthenticated().observe(requireActivity(), {
             binding.progressBar.visibility = View.INVISIBLE
@@ -88,7 +89,7 @@ class EmailAuthFragment : BaseAuthFragment(), View.OnClickListener {
                         android.R.anim.slide_in_left,
                         android.R.anim.slide_out_right
                     )
-                    .replace(this.id, PhoneAuthFragment()).commit()
+                    .replace(this.id, PhoneFragment()).commit()
             }
         }
 

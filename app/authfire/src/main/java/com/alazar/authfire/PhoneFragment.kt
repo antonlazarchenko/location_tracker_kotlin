@@ -10,17 +10,18 @@ import com.alazar.authfire.databinding.FragmentPhoneBinding
 import com.alazar.authfire.di.AuthApp
 import com.alazar.authfire.model.PhoneAuthState
 import com.alazar.authfire.util.Validator
-import com.alazar.authfire.viewmodel.PhoneAuthViewModel
+import com.alazar.authfire.viewmodel.PhoneViewModel
+import com.alazar.base.BaseFragment
 import javax.inject.Inject
 
 
-class PhoneAuthFragment : BaseAuthFragment(), View.OnClickListener {
+class PhoneFragment : BaseFragment(), View.OnClickListener {
 
     private var _binding: FragmentPhoneBinding? = null
 
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: PhoneAuthViewModel
+    private lateinit var viewModel: PhoneViewModel
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -43,7 +44,7 @@ class PhoneAuthFragment : BaseAuthFragment(), View.OnClickListener {
         viewModel = ViewModelProvider(
             requireActivity(),
             viewModelFactory
-        ).get(PhoneAuthViewModel::class.java)
+        ).get(PhoneViewModel::class.java)
 
         viewModel.getStatus().observe(requireActivity(), {
             if (it == PhoneAuthState.STATE_SIGNIN_SUCCESS) {
@@ -98,7 +99,7 @@ class PhoneAuthFragment : BaseAuthFragment(), View.OnClickListener {
                         android.R.anim.slide_in_left,
                         android.R.anim.slide_out_right
                     )
-                    .replace(this.id, EmailAuthFragment()).commit()
+                    .replace(this.id, EmailFragment()).commit()
             }
         }
     }

@@ -7,7 +7,7 @@ import com.alazar.authfire.model.UserModel
 import javax.inject.Inject
 
 
-class EmailAuthViewModel @Inject constructor(userModel: UserModel) : ViewModel() {
+class EmailViewModel @Inject constructor(userModel: UserModel) : ViewModel() {
 
     var model: UserModel = userModel
 

@@ -3,12 +3,15 @@ package com.alazar.authfire.di
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.alazar.authfire.EmailAuthFragment
-import com.alazar.authfire.PhoneAuthFragment
-import com.alazar.authfire.viewmodel.EmailAuthViewModel
-import com.alazar.authfire.viewmodel.PhoneAuthViewModel
+import com.alazar.authfire.EmailFragment
+import com.alazar.authfire.PhoneFragment
+import com.alazar.authfire.viewmodel.EmailViewModel
+import com.alazar.authfire.viewmodel.PhoneViewModel
 import com.alazar.base.di.BaseComponent
 import com.alazar.base.di.DaggerBaseComponent
+import com.alazar.base.di.viewmodel.ViewModelFactory
+import com.alazar.base.di.viewmodel.ViewModelKey
+import com.alazar.base.di.scope.AuthScope
 import dagger.Binds
 import dagger.Component
 import dagger.Module
@@ -24,8 +27,8 @@ import dagger.multibindings.IntoMap
 
 interface AuthAppComponent {
     fun inject(viewModelFactory: ViewModelFactory)
-    fun inject(fragment: EmailAuthFragment)
-    fun inject(fragment: PhoneAuthFragment)
+    fun inject(fragment: EmailFragment)
+    fun inject(fragment: PhoneFragment)
 }
 
 @Module
@@ -33,13 +36,13 @@ abstract class FactoryModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(EmailAuthViewModel::class)
-    internal abstract fun provideEmailAuthViewModel(viewModel: EmailAuthViewModel) : ViewModel
+    @ViewModelKey(EmailViewModel::class)
+    internal abstract fun provideEmailAuthViewModel(viewModel: EmailViewModel) : ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(PhoneAuthViewModel::class)
-    internal abstract fun providePhoneAuthViewModel(viewModel: PhoneAuthViewModel) : ViewModel
+    @ViewModelKey(PhoneViewModel::class)
+    internal abstract fun providePhoneAuthViewModel(viewModel: PhoneViewModel) : ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

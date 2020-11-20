@@ -1,4 +1,4 @@
-package com.alazar.authfire.di
+package com.alazar.base.di.viewmodel
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

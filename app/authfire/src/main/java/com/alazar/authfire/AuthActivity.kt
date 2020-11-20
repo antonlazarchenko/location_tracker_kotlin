@@ -13,7 +13,7 @@ class AuthActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportFragmentManager.beginTransaction()
-            .replace(binding.frameLayout.id, EmailAuthFragment())
+            .replace(binding.frameLayout.id, EmailFragment())
             .commit()
     }
 }

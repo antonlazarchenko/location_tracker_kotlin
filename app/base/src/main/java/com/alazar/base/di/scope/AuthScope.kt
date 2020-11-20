@@ -1,4 +1,4 @@
-package com.alazar.authfire.di
+package com.alazar.base.di.scope
 
 import javax.inject.Scope
 
