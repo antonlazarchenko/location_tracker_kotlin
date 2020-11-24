@@ -53,5 +53,10 @@
     <string name="auth_with_phone_number">click to auth with phone</string>
     <string name="auth_with_email">click to auth with email</string>
     <string name="app_name">Tracker</string>
+    <string name="stop">stop</string>
+    <string name="start">start</string>
+    <string name="stopped">Tracking stopped</string>
+    <string name="running">Tracking running</string>
+    <string name="service_status">Press to start/stop location tracking</string>
 
 </resources>
