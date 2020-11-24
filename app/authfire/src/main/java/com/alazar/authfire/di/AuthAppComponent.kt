@@ -9,9 +9,9 @@ import com.alazar.authfire.viewmodel.EmailViewModel
 import com.alazar.authfire.viewmodel.PhoneViewModel
 import com.alazar.base.di.BaseComponent
 import com.alazar.base.di.DaggerBaseComponent
+import com.alazar.base.di.scope.AuthScope
 import com.alazar.base.di.viewmodel.ViewModelFactory
 import com.alazar.base.di.viewmodel.ViewModelKey
-import com.alazar.base.di.scope.AuthScope
 import dagger.Binds
 import dagger.Component
 import dagger.Module

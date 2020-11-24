@@ -27,6 +27,10 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 
     buildFeatures {
         viewBinding = true
@@ -48,6 +52,9 @@ dependencies {
     testImplementation libs.testJunit
     androidTestImplementation libs.androidTestJunit
     androidTestImplementation libs.androidTestEspresso
+
+    implementation libs.activityResultKtx
+    implementation libs.fragmentResultKtx
 
     // dagger
     implementation libs.dagger

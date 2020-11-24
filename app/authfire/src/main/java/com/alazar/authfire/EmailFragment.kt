@@ -1,11 +1,10 @@
 package com.alazar.authfire
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import android.widget.Toast.makeText
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.databinding.FragmentEmailBinding
 import com.alazar.authfire.di.AuthApp
@@ -47,10 +46,12 @@ class EmailFragment : BaseFragment(), View.OnClickListener {
         viewModel.getIsAuthenticated().observe(requireActivity(), {
             binding.progressBar.visibility = View.INVISIBLE
 
-            if (it)
-                makeText(context, "AUTH SUCCESS", Toast.LENGTH_SHORT).show()
-            else
-                makeText(context, "AUTH FAILED", Toast.LENGTH_SHORT).show()
+            if (it) {
+                requireActivity().setResult(Activity.RESULT_OK)
+                requireActivity().finish()
+            } else {
+                showToast("Authentication failed")
+            }
         })
 
         binding.btnSwitchAuth.setOnClickListener(this)

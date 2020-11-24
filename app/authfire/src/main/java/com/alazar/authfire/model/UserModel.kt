@@ -2,6 +2,7 @@ package com.alazar.authfire.model
 
 import android.app.Activity
 import android.util.Log
+import com.alazar.base.core.UserManagerInterface
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -10,7 +11,7 @@ import com.google.firebase.ktx.Firebase
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class UserModel @Inject constructor() {
+class UserModel @Inject constructor() : UserManagerInterface {
 
     fun interface AuthEmailCallback {
         fun onReady(isAuthorized: Boolean)
@@ -29,16 +30,16 @@ class UserModel @Inject constructor() {
     private var mVerificationId: String? = ""
     private lateinit var mResendToken: PhoneAuthProvider.ForceResendingToken
 
-    fun isAuthorized(): Boolean {
+    override fun isAuthorized(): Boolean {
 
         return auth.uid != null
     }
 
-    fun getUserId(): String? {
+    override fun getUserId(): String? {
         return auth.uid
     }
 
-    fun signOut() {
+    override fun signOut() {
         auth.signOut()
     }
 
