@@ -1,4 +1,4 @@
-package com.alazar.base.core
+package com.alazar.authfire.model
 
 interface UserManagerInterface {
 

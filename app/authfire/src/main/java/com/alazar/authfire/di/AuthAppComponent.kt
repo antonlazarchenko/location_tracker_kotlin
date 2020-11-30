@@ -52,10 +52,8 @@ abstract class FactoryModule {
 class AuthApp : Application() {
     private lateinit var appComponent: AuthAppComponent
 
-    private fun isInitialized() = this::appComponent.isInitialized
-
     fun getComponent(): AuthAppComponent {
-        if (!isInitialized()) {
+        if (!this::appComponent.isInitialized) {
             initDaggerComponent()
         }
         return appComponent

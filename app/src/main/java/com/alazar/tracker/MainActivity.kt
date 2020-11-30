@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import com.alazar.authfire.AuthActivity
 import com.alazar.authfire.model.UserModel
 import com.alazar.base.BaseActivity
-import com.alazar.base.core.UserManagerInterface
+import com.alazar.authfire.model.UserManagerInterface
 import com.alazar.service.TrackerService
 import com.alazar.tracker.databinding.ActivityMainBinding
 import com.alazar.tracker.di.MainApp

@@ -2,7 +2,6 @@ package com.alazar.authfire.model
 
 import android.app.Activity
 import android.util.Log
-import com.alazar.base.core.UserManagerInterface
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*

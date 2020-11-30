@@ -1,10 +1,8 @@
 package com.alazar.tracker.di
 
 import android.app.Application
-import com.alazar.authfire.di.AuthAppComponent
-import com.alazar.authfire.di.DaggerAuthAppComponent
 import com.alazar.authfire.model.UserModel
-import com.alazar.base.core.UserManagerInterface
+import com.alazar.authfire.model.UserManagerInterface
 import com.alazar.base.di.BaseComponent
 import com.alazar.base.di.DaggerBaseComponent
 import com.alazar.base.di.scope.AuthScope
@@ -36,10 +34,8 @@ class MainModule {
 class MainApp : Application() {
     private lateinit var appComponent: MainAppComponent
 
-    private fun isInitialized() = this::appComponent.isInitialized
-
     fun getComponent(): MainAppComponent {
-        if (!isInitialized()) {
+        if (!this::appComponent.isInitialized) {
             initDaggerComponent()
         }
         return appComponent
