@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shared_preference_name">com.alazar.tracker.preference</string>
+    <string name="preference_service_param">service_enabled</string>
+    <string name="notification_channel_desc">Notify me when location tracking</string>
+    <string name="latitude">\"LATITUDE: \"</string>
+    <string name="longitude">\" LONGITUDE: \"</string>
+    <string name="app_name">Tracker</string>
+</resources>

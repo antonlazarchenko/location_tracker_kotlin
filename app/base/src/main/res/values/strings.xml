@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mobile">MOBILE</string>
+    <string name="wifi">WIFI</string>
+    <string name="request_enable_wifi">Please, enable wifi or mobile internet</string>
+    <string name="enable">Enable</string>
+    <string name="cancel">Cancel</string>
+    <string name="request_enable_gps">Please, enable GPS</string>
+</resources>
