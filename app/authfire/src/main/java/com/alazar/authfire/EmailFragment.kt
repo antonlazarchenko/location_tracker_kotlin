@@ -28,7 +28,7 @@ class EmailFragment : BaseFragment(), View.OnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentEmailBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,10 +43,10 @@ class EmailFragment : BaseFragment(), View.OnClickListener {
             viewModelFactory
         ).get(EmailViewModel::class.java)
 
-        viewModel.getIsAuthenticated().observe(requireActivity(), {
+        viewModel.getUser().observe(requireActivity(), {
             binding.progressBar.visibility = View.INVISIBLE
 
-            if (it) {
+            if (it.isAuthenticated) {
                 requireActivity().setResult(Activity.RESULT_OK)
                 requireActivity().finish()
             } else {

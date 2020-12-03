@@ -1,35 +1,39 @@
 package com.alazar.authfire.viewmodel
 
 import android.app.Activity
+import android.app.SharedElementCallback
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.alazar.authfire.interactor.InteractorCallback
+import com.alazar.authfire.interactor.PhoneInteractor
 import com.alazar.authfire.model.UserModel
+import com.alazar.authfire.model.UserUI
 import javax.inject.Inject
 
-class PhoneViewModel @Inject constructor(val model: UserModel) : ViewModel()  {
+class PhoneViewModel @Inject constructor(val interactor: PhoneInteractor) : ViewModel()  {
 
-    private val status = MutableLiveData<Int>()
+    private val user = MutableLiveData<UserUI>()
 
-    fun getStatus(): LiveData<Int> {
-        return status
+    fun getStatus(): LiveData<UserUI> {
+        return user
     }
 
     fun startVerification(phone: String, activity: Activity) {
-        model.startPhoneNumberVerification(phone, activity) {
-            status.postValue(it)
+        interactor.startVerification(phone, activity) {
+            user.postValue(it)
         }
     }
 
     fun resendVerification(phone: String, activity: Activity) {
-        model.resendVerificationCode(phone, activity) {
-            status.postValue(it)
+        interactor.resendVerification(phone, activity) {
+            user.postValue(it)
         }
     }
 
     fun verify(code: String) {
-        model.verifyPhoneNumberWithCode(code) {
-            status.postValue(it)
+        interactor.verify(code) {
+            user.postValue(it)
         }
     }
 }

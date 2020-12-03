@@ -13,11 +13,11 @@ import javax.inject.Inject
 class UserModel @Inject constructor() : UserManagerInterface {
 
     fun interface AuthEmailCallback {
-        fun onReady(isAuthorized: Boolean)
+        fun onReady(isAuthorized: Boolean, userId: String?)
     }
 
     fun interface AuthPhoneCallback {
-        fun onReady(phoneAuthState: Int)
+        fun onReady(isAuthorized: Boolean, userId: String?, phoneAuthState: Int)
     }
 
     companion object {
@@ -51,10 +51,10 @@ class UserModel @Inject constructor() : UserManagerInterface {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "createUserWithEmail:success")
-                    callback.onReady(true)
+                    callback.onReady(true, getUserId())
                 } else {
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    callback.onReady(false)
+                    callback.onReady(false, getUserId())
                 }
             }
     }
@@ -70,10 +70,10 @@ class UserModel @Inject constructor() : UserManagerInterface {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmail:success")
-                    callback.onReady(true)
+                    callback.onReady(true, getUserId())
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    callback.onReady(false)
+                    callback.onReady(false, getUserId())
                 }
             }
     }
@@ -120,10 +120,10 @@ class UserModel @Inject constructor() : UserManagerInterface {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithCredential:success")
-                    callback.onReady(PhoneAuthState.STATE_SIGNIN_SUCCESS)
+                    callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_SIGNIN_SUCCESS)
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    callback.onReady(PhoneAuthState.STATE_SIGNIN_FAILED)
+                    callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_SIGNIN_FAILED)
                 }
             }
     }
@@ -134,15 +134,15 @@ class UserModel @Inject constructor() : UserManagerInterface {
 
         override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
             Log.d(TAG, "onVerificationCompleted:$phoneAuthCredential")
-            callback.onReady(PhoneAuthState.STATE_VERIFY_SUCCESS)
+            callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_VERIFY_SUCCESS)
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
             Log.w(TAG, "onVerificationFailed", e)
             if (e is FirebaseAuthInvalidCredentialsException) {
-                callback.onReady(PhoneAuthState.STATE_VERIFY_FAILED) //Invalid phone number
+                callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_VERIFY_FAILED) //Invalid phone number
             } else if (e is FirebaseTooManyRequestsException) {
-                callback.onReady(PhoneAuthState.STATE_VERIFY_FAILED_SMS_QUOTA) // SMS quota has been exceeded
+                callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_VERIFY_FAILED_SMS_QUOTA) // SMS quota has been exceeded
             }
         }
 
@@ -153,7 +153,7 @@ class UserModel @Inject constructor() : UserManagerInterface {
             Log.d(TAG, "onCodeSent:$verificationId")
             mVerificationId = verificationId
             mResendToken = token
-            callback.onReady(PhoneAuthState.STATE_CODE_SENT)
+            callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_CODE_SENT)
         }
 
     }

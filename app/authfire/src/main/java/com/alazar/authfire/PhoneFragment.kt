@@ -30,7 +30,7 @@ class PhoneFragment : BaseFragment(), View.OnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPhoneBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -48,10 +48,10 @@ class PhoneFragment : BaseFragment(), View.OnClickListener {
         ).get(PhoneViewModel::class.java)
 
         viewModel.getStatus().observe(requireActivity(), {
-            if (it == PhoneAuthState.STATE_SIGNIN_SUCCESS) {
+            if (it.status == PhoneAuthState.STATE_SIGNIN_SUCCESS) {
                 requireActivity().setResult(Activity.RESULT_OK)
                 requireActivity().finish()
-            } else updateUI(it)
+            } else it.status?.let { status -> updateUI(status) }
         })
 
         binding.btnSwitchAuth.setOnClickListener(this)

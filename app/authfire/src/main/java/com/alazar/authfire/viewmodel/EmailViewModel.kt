@@ -3,23 +3,24 @@ package com.alazar.authfire.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.alazar.authfire.model.UserModel
+import com.alazar.authfire.interactor.EmailInteractor
+import com.alazar.authfire.model.UserUI
 import javax.inject.Inject
 
-class EmailViewModel @Inject constructor(val model: UserModel) : ViewModel() {
+class EmailViewModel @Inject constructor(private val interactor: EmailInteractor) : ViewModel() {
 
-    private val isAuthenticated = MutableLiveData<Boolean>()
+    private val user = MutableLiveData<UserUI>()
 
-    fun getIsAuthenticated(): LiveData<Boolean> {
-        return isAuthenticated
+    fun getUser(): LiveData<UserUI> {
+        return user
     }
 
     fun signIn(
         email: String,
         password: String
     ) {
-        model.signInUserWithEmailAndPassword(email, password) {
-            isAuthenticated.postValue(it)
+        interactor.signIn(email, password) {
+            user.postValue(it)
         }
     }
 
@@ -27,8 +28,8 @@ class EmailViewModel @Inject constructor(val model: UserModel) : ViewModel() {
         email: String,
         password: String
     ) {
-        model.createUserWithEmailAndPassword(email, password) {
-            isAuthenticated.postValue(it)
+        interactor.createAccount(email, password) {
+            user.postValue(it)
         }
     }
 
