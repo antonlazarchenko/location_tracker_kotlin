@@ -37,7 +37,8 @@ class TrackerService : Service(), LocationListener {
 
     private lateinit var ringtone: Ringtone
 
-    private val dbFirebaseModel: DbFirebaseModel = DbFirebaseModel()
+    private lateinit var userId: String
+    private lateinit var dbFirebaseModel: DbFirebaseModel
 
     override fun onCreate() {
         super.onCreate()
@@ -62,6 +63,9 @@ class TrackerService : Service(), LocationListener {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         addNotificationAndStartForeground()
+
+        userId = intent.getStringExtra("userId").toString()
+        dbFirebaseModel = DbFirebaseModel(userId)
 
         runLocationTransfer()
 

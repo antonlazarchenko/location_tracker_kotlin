@@ -29,7 +29,7 @@ class UserModel @Inject constructor() : UserManagerInterface {
     private var mVerificationId: String? = ""
     private lateinit var mResendToken: PhoneAuthProvider.ForceResendingToken
 
-    override fun isAuthorized(): Boolean {
+    override fun isAuthenticated(): Boolean {
 
         return auth.uid != null
     }
@@ -120,10 +120,10 @@ class UserModel @Inject constructor() : UserManagerInterface {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithCredential:success")
-                    callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_SIGNIN_SUCCESS)
+                    callback.onReady(isAuthenticated(), getUserId(), PhoneAuthState.STATE_SIGNIN_SUCCESS)
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_SIGNIN_FAILED)
+                    callback.onReady(isAuthenticated(), getUserId(), PhoneAuthState.STATE_SIGNIN_FAILED)
                 }
             }
     }
@@ -134,15 +134,15 @@ class UserModel @Inject constructor() : UserManagerInterface {
 
         override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
             Log.d(TAG, "onVerificationCompleted:$phoneAuthCredential")
-            callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_VERIFY_SUCCESS)
+            callback.onReady(isAuthenticated(), getUserId(), PhoneAuthState.STATE_VERIFY_SUCCESS)
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
             Log.w(TAG, "onVerificationFailed", e)
             if (e is FirebaseAuthInvalidCredentialsException) {
-                callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_VERIFY_FAILED) //Invalid phone number
+                callback.onReady(isAuthenticated(), getUserId(), PhoneAuthState.STATE_VERIFY_FAILED) //Invalid phone number
             } else if (e is FirebaseTooManyRequestsException) {
-                callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_VERIFY_FAILED_SMS_QUOTA) // SMS quota has been exceeded
+                callback.onReady(isAuthenticated(), getUserId(), PhoneAuthState.STATE_VERIFY_FAILED_SMS_QUOTA) // SMS quota has been exceeded
             }
         }
 
@@ -153,7 +153,7 @@ class UserModel @Inject constructor() : UserManagerInterface {
             Log.d(TAG, "onCodeSent:$verificationId")
             mVerificationId = verificationId
             mResendToken = token
-            callback.onReady(isAuthorized(), getUserId(), PhoneAuthState.STATE_CODE_SENT)
+            callback.onReady(isAuthenticated(), getUserId(), PhoneAuthState.STATE_CODE_SENT)
         }
 
     }

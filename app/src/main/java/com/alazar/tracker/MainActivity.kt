@@ -6,13 +6,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.alazar.authfire.AuthActivity
-import com.alazar.authfire.model.UserModel
-import com.alazar.base.BaseActivity
 import com.alazar.authfire.model.UserManagerInterface
+import com.alazar.base.BaseActivity
 import com.alazar.service.TrackerService
 import com.alazar.tracker.databinding.ActivityMainBinding
 import com.alazar.tracker.di.MainApp
@@ -22,6 +22,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     @Inject
     lateinit var userManager: UserManagerInterface
+
+    private var userId: String? = null
 
     private lateinit var binding: ActivityMainBinding
 
@@ -38,13 +40,14 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         binding.btnStart.setOnClickListener(this)
         binding.btnStop.setOnClickListener(this)
 
+        preferences = getSharedPreferences(getString(R.string.shared_preference_name), MODE_PRIVATE)
+
         requestPermissions()
         checkNetworkConnection()
         checkGpsConnection()
 
-        if (!userManager.isAuthorized()) {
+        if (!userManager.isAuthenticated()) {
             openPostActivity.launch(Intent(this, AuthActivity::class.java))
-
         } else {
             loadLayout()
             changeStatus(getIsRunningPreference())
@@ -53,8 +56,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     private val openPostActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK)
+            if (result.resultCode == Activity.RESULT_OK) {
+                userId = result.data?.getStringExtra("userId").toString()
+                Log.d("DATA=====", userId.toString())
                 loadLayout()
+            }
         }
 
     private fun loadLayout() {
@@ -64,7 +70,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             binding.btnSignOut.id -> {
-                UserModel().signOut()
+                userManager.signOut()
                 recreate()
             }
             binding.btnStart.id -> {
@@ -101,7 +107,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
 
     private fun startService() {
-        startService(Intent(this, TrackerService::class.java))
+        startService(Intent(this, TrackerService::class.java).putExtra("userId", userId))
     }
 
     private fun stopService() {
@@ -109,10 +115,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun getIsRunningPreference(): Boolean {
-        preferences = getSharedPreferences(
-            getString(R.string.shared_preference_name),
-            MODE_PRIVATE
-        )
         return preferences.getBoolean(getString(R.string.preference_service_param), false)
     }
 

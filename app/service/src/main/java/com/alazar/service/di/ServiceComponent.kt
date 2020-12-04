@@ -1,28 +1,23 @@
-package com.alazar.tracker.di
+package com.alazar.service.di
 
 import android.app.Application
 import com.alazar.authfire.model.UserManagerInterface
 import com.alazar.authfire.model.UserModel
-import com.alazar.base.di.BaseComponent
-import com.alazar.base.di.DaggerBaseComponent
-import com.alazar.base.di.scope.MainScope
-import com.alazar.tracker.MainActivity
+import com.alazar.base.di.scope.ServiceScope
+import com.alazar.service.RestartHelper
 import dagger.Component
 import dagger.Module
 import dagger.Provides
 
-@MainScope
+@ServiceScope
 @Component(
-    dependencies = [
-        BaseComponent::class,
-    ],
     modules = [
         MainModule::class,
     ]
 )
 
-interface MainAppComponent {
-    fun inject(activity: MainActivity)
+interface ServiceComponent {
+    fun inject(helper: RestartHelper)
 }
 
 @Module
@@ -31,10 +26,10 @@ class MainModule {
     fun provideUserManager() : UserManagerInterface = UserModel()
 }
 
-class MainApp : Application() {
-    private lateinit var appComponent: MainAppComponent
+class ServiceApp : Application() {
+    private lateinit var appComponent: ServiceComponent
 
-    fun getComponent(): MainAppComponent {
+    fun getComponent(): ServiceComponent {
         if (!this::appComponent.isInitialized) {
             initDaggerComponent()
         }
@@ -42,9 +37,8 @@ class MainApp : Application() {
     }
 
     private fun initDaggerComponent() {
-        appComponent = DaggerMainAppComponent
+        appComponent = DaggerServiceComponent
             .builder()
-            .baseComponent(DaggerBaseComponent.builder().build())
             .build()
     }
 }

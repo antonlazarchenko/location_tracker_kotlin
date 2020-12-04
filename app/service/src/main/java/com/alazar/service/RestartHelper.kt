@@ -7,16 +7,23 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import com.alazar.authfire.model.UserModel
+import com.alazar.authfire.model.UserManagerInterface
+import com.alazar.service.di.ServiceApp
+import javax.inject.Inject
 
 
 class RestartHelper {
+
+    init {
+        ServiceApp().getComponent().inject(this)
+    }
 
     companion object {
         const val TAG = "TrackerRestartService"
     }
 
-    private val user: UserModel = UserModel()
+    @Inject
+    lateinit var user: UserManagerInterface
 
     fun restartService(context: Context, serviceClass: Class<*>?) {
         Log.d(TAG, "******* JOB: ATTEMPT TO RESTART TRACKER...")
@@ -53,7 +60,7 @@ class RestartHelper {
         val isServicePrefEnabled =
             preferences.getBoolean(context.getString(R.string.preference_service_param), false)
         if (isServicePrefEnabled
-            && user.isAuthorized()
+            && user.isAuthenticated()
         ) {
             status = true
         }

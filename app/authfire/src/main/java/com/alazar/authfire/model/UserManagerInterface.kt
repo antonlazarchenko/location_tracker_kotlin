@@ -2,7 +2,7 @@ package com.alazar.authfire.model
 
 interface UserManagerInterface {
 
-    fun isAuthorized(): Boolean
+    fun isAuthenticated(): Boolean
 
     fun getUserId(): String?
 

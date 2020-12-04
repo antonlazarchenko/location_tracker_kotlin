@@ -1,6 +1,7 @@
 package com.alazar.authfire
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -49,7 +50,7 @@ class PhoneFragment : BaseFragment(), View.OnClickListener {
 
         viewModel.getStatus().observe(requireActivity(), {
             if (it.status == PhoneAuthState.STATE_SIGNIN_SUCCESS) {
-                requireActivity().setResult(Activity.RESULT_OK)
+                requireActivity().setResult(Activity.RESULT_OK, Intent().putExtra("userId", it.id))
                 requireActivity().finish()
             } else it.status?.let { status -> updateUI(status) }
         })

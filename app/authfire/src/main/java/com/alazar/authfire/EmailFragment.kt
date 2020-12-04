@@ -1,6 +1,7 @@
 package com.alazar.authfire
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,12 +48,14 @@ class EmailFragment : BaseFragment(), View.OnClickListener {
             binding.progressBar.visibility = View.INVISIBLE
 
             if (it.isAuthenticated) {
-                requireActivity().setResult(Activity.RESULT_OK)
+                requireActivity().setResult(Activity.RESULT_OK, Intent().putExtra("userId", it.id))
                 requireActivity().finish()
             } else {
                 showToast("Authentication failed")
             }
         })
+
+//        viewModel.getUserForAuthentication() // if user.isAuthenticated -> triggers finish()
 
         binding.btnSwitchAuth.setOnClickListener(this)
         binding.btnSignIn.setOnClickListener(this)
