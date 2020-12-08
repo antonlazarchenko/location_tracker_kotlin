@@ -15,12 +15,6 @@ class EmailViewModel @Inject constructor(private val interactor: EmailInteractor
         return user
     }
 
-    fun getUserForAuthentication() {
-        interactor.getUserForAuthentication {
-            user.postValue(it)
-        }
-    }
-
     fun signIn(
         email: String,
         password: String

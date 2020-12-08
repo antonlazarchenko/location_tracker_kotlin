@@ -9,12 +9,6 @@ class EmailInteractor @Inject constructor(val model: UserModel) : Interactor {
 
     private var userUI = UserUI()
 
-    fun getUserForAuthentication(callback: InteractorCallback) {
-        userUI.id = model.getUserId()
-        userUI.isAuthenticated = model.isAuthenticated()
-        callback.onReady(userUI)
-    }
-
     fun signIn(
         email: String,
         password: String,

@@ -1,15 +1,13 @@
 package com.alazar.tracker.di
 
 import android.app.Application
-import com.alazar.authfire.model.UserManagerInterface
-import com.alazar.authfire.model.UserModel
+import com.alazar.authfire.di.AuthUserModule
 import com.alazar.base.di.BaseComponent
 import com.alazar.base.di.DaggerBaseComponent
 import com.alazar.base.di.scope.MainScope
 import com.alazar.tracker.MainActivity
 import dagger.Component
 import dagger.Module
-import dagger.Provides
 
 @MainScope
 @Component(
@@ -25,11 +23,9 @@ interface MainAppComponent {
     fun inject(activity: MainActivity)
 }
 
-@Module
-class MainModule {
-    @Provides
-    fun provideUserManager() : UserManagerInterface = UserModel()
-}
+@Module(includes = [AuthUserModule::class])
+class MainModule
+
 
 class MainApp : Application() {
     private lateinit var appComponent: MainAppComponent

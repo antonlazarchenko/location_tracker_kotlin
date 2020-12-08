@@ -1,13 +1,10 @@
 package com.alazar.authfire.viewmodel
 
 import android.app.Activity
-import android.app.SharedElementCallback
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.alazar.authfire.interactor.InteractorCallback
 import com.alazar.authfire.interactor.PhoneInteractor
-import com.alazar.authfire.model.UserModel
 import com.alazar.authfire.model.UserUI
 import javax.inject.Inject
 

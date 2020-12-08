@@ -1,13 +1,11 @@
 package com.alazar.service.di
 
 import android.app.Application
-import com.alazar.authfire.model.UserManagerInterface
-import com.alazar.authfire.model.UserModel
+import com.alazar.authfire.di.AuthUserModule
 import com.alazar.base.di.scope.ServiceScope
 import com.alazar.service.RestartHelper
 import dagger.Component
 import dagger.Module
-import dagger.Provides
 
 @ServiceScope
 @Component(
@@ -20,11 +18,8 @@ interface ServiceComponent {
     fun inject(helper: RestartHelper)
 }
 
-@Module
-class MainModule {
-    @Provides
-    fun provideUserManager() : UserManagerInterface = UserModel()
-}
+@Module(includes = [AuthUserModule::class])
+class MainModule
 
 class ServiceApp : Application() {
     private lateinit var appComponent: ServiceComponent
