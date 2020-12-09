@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -22,8 +21,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     @Inject
     lateinit var userManager: UserManagerInterface
-
-    private var userId: String? = null
 
     private lateinit var binding: ActivityMainBinding
 
@@ -57,20 +54,20 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private val openPostActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                userId = result.data?.getStringExtra("userId").toString()
-                Log.d("DATA=====", userId.toString())
                 loadLayout()
             }
         }
 
     private fun loadLayout() {
         setContentView(binding.root)
+        changeStatus(getIsRunningPreference())
     }
 
     override fun onClick(v: View) {
         when (v.id) {
             binding.btnSignOut.id -> {
                 userManager.signOut()
+                stopService()
                 recreate()
             }
             binding.btnStart.id -> {
@@ -107,7 +104,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
 
     private fun startService() {
-        startService(Intent(this, TrackerService::class.java).putExtra("userId", userId))
+        startService(Intent(this, TrackerService::class.java))
     }
 
     private fun stopService() {

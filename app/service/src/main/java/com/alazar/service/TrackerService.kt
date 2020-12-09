@@ -16,18 +16,28 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
+import com.alazar.authfire.model.UserManagerInterface
 import com.alazar.base.util.NetworkUtil
 import com.alazar.service.data.LocationData
+import com.alazar.service.di.ServiceApp
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.orhanobut.hawk.Hawk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 class TrackerService : Service(), LocationListener {
     companion object {
         private const val TAG = "TrackerService"
         private const val NOTIFICATION_PROCESS_ID = 1024
         private const val LOCATION_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
-        private const val LOCATION_INTERVAL = 20 //seconds
+        private const val LOCATION_INTERVAL = 60 //seconds
     }
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -37,11 +47,20 @@ class TrackerService : Service(), LocationListener {
 
     private lateinit var ringtone: Ringtone
 
-    private lateinit var userId: String
+    @Inject
+    lateinit var user: UserManagerInterface
+
     private lateinit var dbFirebaseModel: DbFirebaseModel
+
+    private lateinit var workRequest: PeriodicWorkRequest
 
     override fun onCreate() {
         super.onCreate()
+
+        ServiceApp().getComponent().inject(this)
+
+        dbFirebaseModel = DbFirebaseModel(user.getUserId().toString())
+        Log.d(TAG, user.getUserId().toString())
 
         connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -64,10 +83,8 @@ class TrackerService : Service(), LocationListener {
         super.onStartCommand(intent, flags, startId)
         addNotificationAndStartForeground()
 
-        userId = intent.getStringExtra("userId").toString()
-        dbFirebaseModel = DbFirebaseModel(userId)
-
         runLocationTransfer()
+        addWorkers()
 
         Log.d(TAG, "===== SERVICE START")
         return START_STICKY
@@ -109,7 +126,11 @@ class TrackerService : Service(), LocationListener {
 
     override fun onDestroy() {
         super.onDestroy()
+
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+
+        WorkManager.getInstance(this).cancelWorkById(workRequest.id)
+
         Log.d(TAG, "===== SERVICE STOP")
     }
 
@@ -176,7 +197,10 @@ class TrackerService : Service(), LocationListener {
                 Toast.LENGTH_SHORT
             ).show()
         } else {
-            saveToLocalStorage(location)
+
+            GlobalScope.launch(Dispatchers.IO) {
+                saveToLocalStorage(location)
+            }
         }
     }
 
@@ -192,6 +216,18 @@ class TrackerService : Service(), LocationListener {
         }
         Hawk.put(count.toString(), locationData)
         Log.d(TAG, "HAWK /// Saved to local storage. COUNT = " + Hawk.count())
+    }
+
+    private fun addWorkers() {
+        workRequest = PeriodicWorkRequest.Builder(
+            FirebaseWorker::class.java, 15, TimeUnit.MINUTES, 2, TimeUnit.MINUTES
+        )
+            .build()
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            FirebaseWorker.TAG,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            workRequest
+        )
     }
 
 }

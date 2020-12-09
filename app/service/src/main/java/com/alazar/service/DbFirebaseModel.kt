@@ -14,11 +14,11 @@ class DbFirebaseModel constructor(private val userId: String) {
 
     private val db = Firebase.firestore
 
-    private fun save(locationData: LocationData) {
+    fun save(locationData: LocationData) {
         db.collection(userId).document(locationData.timestamp.toString())
             .set(locationData.getMap())
-            .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "FIREBASE: DocumentSnapshot added with ID: $documentReference")
+            .addOnSuccessListener {
+                Log.d(TAG, "FIREBASE: DocumentSnapshot added")
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "FIREBASE: Error adding document", e)
