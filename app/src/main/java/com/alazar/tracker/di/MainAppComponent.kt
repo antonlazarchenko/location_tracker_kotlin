@@ -6,6 +6,7 @@ import com.alazar.base.di.BaseComponent
 import com.alazar.base.di.DaggerBaseComponent
 import com.alazar.base.di.scope.MainScope
 import com.alazar.tracker.MainActivity
+import com.alazar.tracker.MapActivity
 import dagger.Component
 import dagger.Module
 
@@ -21,6 +22,7 @@ import dagger.Module
 
 interface MainAppComponent {
     fun inject(activity: MainActivity)
+    fun inject(activity: MapActivity)
 }
 
 @Module(includes = [AuthUserModule::class])

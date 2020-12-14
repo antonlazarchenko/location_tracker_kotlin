@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/app/authfire" />
             <option value="$PROJECT_DIR$/app/base" />
+            <option value="$PROJECT_DIR$/app/map" />
             <option value="$PROJECT_DIR$/app/service" />
           </set>
         </option>

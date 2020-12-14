@@ -59,11 +59,11 @@ dependencies {
     implementation libs.gmsLocation
 
     //firebase
-    implementation 'com.google.firebase:firebase-firestore-ktx:22.0.0'
+    implementation libs.firebaseFirestore
 
     // coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9"
+    implementation libs.coroutinesCore
+    implementation libs.coroutinesAndroid
 
     // workManager
     def work_version = "2.4.0"

@@ -6,4 +6,8 @@
     <string name="enable">Enable</string>
     <string name="cancel">Cancel</string>
     <string name="request_enable_gps">Please, enable GPS</string>
+    <string name="gmt_timezone">GMT</string>
+    <string name="internet_available">Internet available</string>
+    <string name="internet_lost">Internet connection lost</string>
+    <string name="internet_unavailable">Internet unavailable</string>
 </resources>

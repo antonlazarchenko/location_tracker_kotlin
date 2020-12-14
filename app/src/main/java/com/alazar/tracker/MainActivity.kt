@@ -1,13 +1,11 @@
 package com.alazar.tracker
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.alazar.authfire.AuthActivity
 import com.alazar.authfire.model.UserManagerInterface
@@ -51,14 +49,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private val openPostActivity =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                loadLayout()
-            }
-        }
 
-    private fun loadLayout() {
+    override fun loadLayout() {
         setContentView(binding.root)
         changeStatus(getIsRunningPreference())
     }

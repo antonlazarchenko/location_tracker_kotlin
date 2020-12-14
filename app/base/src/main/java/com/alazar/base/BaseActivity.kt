@@ -1,5 +1,6 @@
 package com.alazar.base
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
@@ -12,7 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.location.LocationManagerCompat
 import com.alazar.base.util.NetworkUtil
 
-open class BaseActivity : AppCompatActivity() {
+interface BaseActivityInterface {
+    fun loadLayout()
+}
+
+open class BaseActivity : AppCompatActivity(), BaseActivityInterface {
 
     companion object {
         const val TAG = "BaseActivity"
@@ -25,6 +30,12 @@ open class BaseActivity : AppCompatActivity() {
             }
         }
 
+    protected val openPostActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                loadLayout()
+            }
+        }
 
     protected open fun checkNetworkConnection() {
         val connectivityManager =
@@ -61,4 +72,6 @@ open class BaseActivity : AppCompatActivity() {
             alert.show()
         }
     }
+
+    override fun loadLayout() {}
 }

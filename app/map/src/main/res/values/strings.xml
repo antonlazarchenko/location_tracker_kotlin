@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="content_desc_logout">logout</string>
+    <string name="content_desc_calendar">calendar</string>
+    <string name="gmt_timezone">GMT</string>
+    <string name="logout_confirmation">Sure you want to logout?</string>
+    <string name="yes">Yes</string>
+    <string name="nothing_to_show">Ooops, nothing to show</string>
+    <string name="network_disabled">Network disabled</string>
+</resources>

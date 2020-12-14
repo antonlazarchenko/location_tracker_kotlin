@@ -43,6 +43,7 @@ dependencies {
     implementation project(path: ':app:base')
     implementation project(path: ':app:authfire')
     implementation project(path: ':app:service')
+    implementation project(path: ':app:map')
 
     implementation libs.kotlin
     implementation libs.core
