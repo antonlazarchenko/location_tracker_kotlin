@@ -63,15 +63,15 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 recreate()
             }
             binding.btnStart.id -> {
-                savePreferences(true)
+                saveServiceStatusPref(true)
             }
             binding.btnStop.id -> {
-                savePreferences(false)
+                saveServiceStatusPref(false)
             }
         }
     }
 
-    private fun savePreferences(status: Boolean) {
+    private fun saveServiceStatusPref(status: Boolean) {
         val editor = preferences.edit()
         editor.putBoolean(getString(R.string.preference_service_param), status)
         editor.apply()

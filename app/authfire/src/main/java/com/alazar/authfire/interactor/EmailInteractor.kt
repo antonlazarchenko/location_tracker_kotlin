@@ -12,7 +12,7 @@ class EmailInteractor @Inject constructor(val model: UserModel) : Interactor {
     fun signIn(
         email: String,
         password: String,
-        callback: InteractorCallback
+        onReady: (userUI: UserUI) -> Unit
     ) {
         model.signInUserWithEmailAndPassword(
             email,
@@ -20,14 +20,14 @@ class EmailInteractor @Inject constructor(val model: UserModel) : Interactor {
         ) { isAuth: Boolean, id: String? ->
             userUI.isAuthenticated = isAuth
             userUI.id = id
-            callback.onReady(userUI)
+            onReady(userUI)
         }
     }
 
     fun createAccount(
         email: String,
         password: String,
-        callback: InteractorCallback
+        onReady: (userUI: UserUI) -> Unit
     ) {
         model.createUserWithEmailAndPassword(
             email,
@@ -35,7 +35,7 @@ class EmailInteractor @Inject constructor(val model: UserModel) : Interactor {
         ) { isAuth: Boolean, id: String? ->
             userUI.isAuthenticated = isAuth
             userUI.id = id
-            callback.onReady(userUI)
+            onReady(userUI)
         }
     }
 }

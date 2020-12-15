@@ -12,10 +12,6 @@ import javax.inject.Inject
 
 class UserModel @Inject constructor() : UserManagerInterface {
 
-    fun interface AuthEmailCallback {
-        fun onReady(isAuthorized: Boolean, userId: String?)
-    }
-
     fun interface AuthPhoneCallback {
         fun onReady(isAuthorized: Boolean, userId: String?, phoneAuthState: Int)
     }
@@ -29,10 +25,7 @@ class UserModel @Inject constructor() : UserManagerInterface {
     private var mVerificationId: String? = ""
     private lateinit var mResendToken: PhoneAuthProvider.ForceResendingToken
 
-    override fun isAuthenticated(): Boolean {
-
-        return auth.uid != null
-    }
+    override fun isAuthenticated(): Boolean = auth.uid != null
 
     override fun getUserId(): String? {
         return auth.uid
@@ -45,16 +38,16 @@ class UserModel @Inject constructor() : UserManagerInterface {
     fun createUserWithEmailAndPassword(
         email: String,
         password: String,
-        callback: AuthEmailCallback
+        onReady: (isAuthenticated: Boolean, userId: String?) -> Unit,
     ) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "createUserWithEmail:success")
-                    callback.onReady(true, getUserId())
+                    onReady(true, getUserId())
                 } else {
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    callback.onReady(false, getUserId())
+                    onReady(false, getUserId())
                 }
             }
     }
@@ -62,7 +55,7 @@ class UserModel @Inject constructor() : UserManagerInterface {
     fun signInUserWithEmailAndPassword(
         email: String,
         password: String,
-        callback: AuthEmailCallback
+        onReady: (isAuthenticated: Boolean, userId: String?) -> Unit
     ) {
         Log.d(TAG, "signIn:$email")
 
@@ -70,10 +63,10 @@ class UserModel @Inject constructor() : UserManagerInterface {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmail:success")
-                    callback.onReady(true, getUserId())
+                    onReady(true, getUserId())
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    callback.onReady(false, getUserId())
+                    onReady(false, getUserId())
                 }
             }
     }
