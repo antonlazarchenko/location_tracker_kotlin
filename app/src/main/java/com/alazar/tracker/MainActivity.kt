@@ -2,7 +2,6 @@ package com.alazar.tracker
 
 import android.Manifest
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -10,6 +9,7 @@ import androidx.core.content.ContextCompat
 import com.alazar.authfire.AuthActivity
 import com.alazar.authfire.model.UserManagerInterface
 import com.alazar.base.BaseActivity
+import com.alazar.base.core.PreferenceProvider
 import com.alazar.service.TrackerService
 import com.alazar.tracker.databinding.ActivityMainBinding
 import com.alazar.tracker.di.MainApp
@@ -20,9 +20,10 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     @Inject
     lateinit var userManager: UserManagerInterface
 
-    private lateinit var binding: ActivityMainBinding
+    @Inject
+    lateinit var preferences: PreferenceProvider
 
-    private lateinit var preferences: SharedPreferences
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +36,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         binding.btnStart.setOnClickListener(this)
         binding.btnStop.setOnClickListener(this)
 
-        preferences = getSharedPreferences(getString(R.string.shared_preference_name), MODE_PRIVATE)
-
         requestPermissions()
         checkNetworkConnection()
         checkGpsConnection()
@@ -44,16 +43,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         if (!userManager.isAuthenticated()) {
             openPostActivity.launch(Intent(this, AuthActivity::class.java))
         } else {
-            loadLayout()
-            changeStatus(getIsRunningPreference())
+            setContentView(binding.root)
+            changeStatus(preferences.getServiceStatus())
         }
     }
 
-
-    override fun loadLayout() {
-        setContentView(binding.root)
-        changeStatus(getIsRunningPreference())
-    }
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -63,19 +57,14 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 recreate()
             }
             binding.btnStart.id -> {
-                saveServiceStatusPref(true)
+                preferences.saveServiceStatus(true)
+                changeStatus(true)
             }
             binding.btnStop.id -> {
-                saveServiceStatusPref(false)
+                preferences.saveServiceStatus(false)
+                changeStatus(false)
             }
         }
-    }
-
-    private fun saveServiceStatusPref(status: Boolean) {
-        val editor = preferences.edit()
-        editor.putBoolean(getString(R.string.preference_service_param), status)
-        editor.apply()
-        changeStatus(status)
     }
 
     private fun changeStatus(isRunningPref: Boolean) {
@@ -101,10 +90,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     private fun stopService() {
         stopService(Intent(this, TrackerService::class.java))
-    }
-
-    private fun getIsRunningPreference(): Boolean {
-        return preferences.getBoolean(getString(R.string.preference_service_param), false)
     }
 
     private fun requestPermissions() {

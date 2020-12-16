@@ -10,4 +10,6 @@
     <string name="internet_available">Internet available</string>
     <string name="internet_lost">Internet connection lost</string>
     <string name="internet_unavailable">Internet unavailable</string>
+    <string name="shared_preference_name">com.alazar.tracker.preference</string>
+    <string name="preference_service_param">service_enabled</string>
 </resources>
