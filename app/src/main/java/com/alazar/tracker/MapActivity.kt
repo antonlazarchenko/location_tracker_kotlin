@@ -22,7 +22,7 @@ class MapActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MainApp().getComponent().inject(this)
+        MainApp.appComponent.inject(this)
 
         requestPermissions()
         checkNetworkConnection()

@@ -20,7 +20,7 @@ class MapViewModel @Inject constructor() : ViewModel()  {
     private val locations = MutableLiveData<ArrayList<LocationData>>()
 
     init {
-        MapApp().getComponent().inject(this)
+        MapApp.appComponent.inject(this)
 
         model = DbFirebaseModel(user.getUserId().toString())
     }

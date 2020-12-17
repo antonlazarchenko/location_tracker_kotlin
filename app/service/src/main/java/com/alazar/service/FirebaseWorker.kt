@@ -27,7 +27,7 @@ class FirebaseWorker(context: Context, params: WorkerParameters) : Worker(contex
     private var dbFirebaseModel: DbFirebaseModel
 
     init {
-        ServiceApp().getComponent().inject(this)
+        ServiceApp.appComponent.inject(this)
 
         dbFirebaseModel = DbFirebaseModel(user.getUserId().toString())
     }

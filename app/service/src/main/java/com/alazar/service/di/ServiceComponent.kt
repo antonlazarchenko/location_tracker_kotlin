@@ -2,6 +2,7 @@ package com.alazar.service.di
 
 import android.app.Application
 import com.alazar.authfire.di.AuthUserModule
+import com.alazar.base.di.BaseModule
 import com.alazar.base.di.scope.ServiceScope
 import com.alazar.service.FirebaseWorker
 import com.alazar.service.RestartHelper
@@ -22,22 +23,21 @@ interface ServiceComponent {
     fun inject(service: TrackerService)
 }
 
-@Module(includes = [AuthUserModule::class])
+@Module(includes = [AuthUserModule::class, BaseModule::class])
 class MainModule
 
 class ServiceApp : Application() {
-    private lateinit var appComponent: ServiceComponent
 
-    fun getComponent(): ServiceComponent {
-        if (!this::appComponent.isInitialized) {
-            initDaggerComponent()
-        }
-        return appComponent
-    }
+    override fun onCreate() {
+        super.onCreate()
 
-    private fun initDaggerComponent() {
         appComponent = DaggerServiceComponent
             .builder()
+            .baseModule(BaseModule(this))
             .build()
+    }
+
+    companion object {
+        lateinit var appComponent: ServiceComponent
     }
 }

@@ -60,19 +60,17 @@ abstract class FactoryModule {
 }
 
 class AuthApp : Application() {
-    private lateinit var appComponent: AuthAppComponent
 
-    fun getComponent(): AuthAppComponent {
-        if (!this::appComponent.isInitialized) {
-            initDaggerComponent()
-        }
-        return appComponent
-    }
+    override fun onCreate() {
+        super.onCreate()
 
-    private fun initDaggerComponent() {
         appComponent = DaggerAuthAppComponent
             .builder()
             .baseComponent(DaggerBaseComponent.builder().build())
             .build()
+    }
+
+    companion object {
+        lateinit var appComponent: AuthAppComponent
     }
 }

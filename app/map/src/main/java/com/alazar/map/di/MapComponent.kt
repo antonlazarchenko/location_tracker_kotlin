@@ -43,18 +43,16 @@ abstract class FactoryModule {
 }
 
 class MapApp : Application() {
-    private lateinit var appComponent: MapComponent
 
-    fun getComponent(): MapComponent {
-        if (!this::appComponent.isInitialized) {
-            initDaggerComponent()
-        }
-        return appComponent
-    }
+    override fun onCreate() {
+        super.onCreate()
 
-    private fun initDaggerComponent() {
         appComponent = DaggerMapComponent
             .builder()
             .build()
+    }
+
+    companion object {
+        lateinit var appComponent: MapComponent
     }
 }

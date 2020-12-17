@@ -57,7 +57,7 @@ class TrackerService : Service(), LocationListener {
     override fun onCreate() {
         super.onCreate()
 
-        ServiceApp().getComponent().inject(this)
+        ServiceApp.appComponent.inject(this)
 
         dbFirebaseModel = DbFirebaseModel(user.getUserId().toString())
         Log.d(TAG, user.getUserId().toString())

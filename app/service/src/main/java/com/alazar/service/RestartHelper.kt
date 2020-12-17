@@ -15,7 +15,7 @@ import javax.inject.Inject
 class RestartHelper {
 
     init {
-        ServiceApp().getComponent().inject(this)
+        ServiceApp.appComponent.inject(this)
     }
 
     companion object {

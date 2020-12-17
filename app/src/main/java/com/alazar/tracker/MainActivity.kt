@@ -28,7 +28,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MainApp().getComponent().inject(this)
+        MainApp.appComponent.inject(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 

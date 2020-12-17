@@ -14,7 +14,7 @@ import dagger.Module
 @MainScope
 @Component(
     dependencies = [
-        BaseComponent::class,
+//        BaseComponent::class,
     ],
     modules = [
         MainModule::class,
@@ -37,20 +37,18 @@ class MainModule
 
 
 class MainApp : Application() {
-    private lateinit var appComponent: MainAppComponent
 
-    fun getComponent(): MainAppComponent {
-        if (!this::appComponent.isInitialized) {
-            initDaggerComponent()
-        }
-        return appComponent
-    }
+    override fun onCreate() {
+        super.onCreate()
 
-    private fun initDaggerComponent() {
         appComponent = DaggerMainAppComponent
             .builder()
             .baseModule(BaseModule(this))
-            .baseComponent(DaggerBaseComponent.builder().baseModule(BaseModule(this)).build())
+//            .baseComponent(DaggerBaseComponent.builder().baseModule(BaseModule(this)).build())
             .build()
+    }
+
+    companion object {
+        lateinit var appComponent: MainAppComponent
     }
 }

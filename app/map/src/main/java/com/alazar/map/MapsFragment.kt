@@ -77,7 +77,7 @@ class MapsFragment : Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        MapApp().getComponent().inject(this)
+        MapApp.appComponent.inject(this)
 
         binding = FragmentMapsBinding.inflate(inflater, container, false)
 

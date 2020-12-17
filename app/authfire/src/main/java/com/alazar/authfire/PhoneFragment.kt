@@ -39,7 +39,7 @@ class PhoneFragment : BaseFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        AuthApp().getComponent().inject(this)
+        AuthApp.appComponent.inject(this)
 
         updateUI(PhoneAuthState.STATE_INITIALIZED)
 
