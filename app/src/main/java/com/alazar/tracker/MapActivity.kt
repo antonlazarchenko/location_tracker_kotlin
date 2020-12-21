@@ -32,9 +32,6 @@ class MapActivity : BaseActivity() {
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Log.d("TAGGGGGGGGG", supportFragmentManager.fragments.toString())
-        Log.d("TAGGGGGGGGG", supportFragmentManager.backStackEntryCount.toString())
-
         if (!userManager.isAuthenticated()) {
             openPostActivity.launch(Intent(this, AuthActivity::class.java))
         } else {
