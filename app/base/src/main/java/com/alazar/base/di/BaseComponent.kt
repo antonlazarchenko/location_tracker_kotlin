@@ -2,7 +2,9 @@ package com.alazar.base.di
 
 import android.app.Application
 import android.content.Context
+import com.alazar.base.core.NetworkProvider
 import com.alazar.base.core.PreferenceProvider
+import provider.NetworkWrapper
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -17,8 +19,12 @@ import javax.inject.Singleton
 )
 
 interface BaseComponent {
+    fun provideContext(): Context
+    fun provideNetworkProvider(): NetworkProvider
+    fun provideSharedPreferences(): PreferenceProvider
     fun inject(baseApp: BaseApp)
     fun inject(wrapper: SharedPrefWrapper)
+    fun inject(network: NetworkWrapper)
 }
 
 @Module
@@ -28,6 +34,9 @@ class BaseModule constructor(private val application: Application) {
 
     @Provides
     fun provideSharedPreferences(): PreferenceProvider = SharedPrefWrapper()
+
+    @Provides
+    fun provideNetworkProvider(): NetworkProvider = NetworkWrapper()
 }
 
 open class BaseApp : Application() {

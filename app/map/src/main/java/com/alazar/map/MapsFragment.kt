@@ -16,9 +16,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.model.UserManagerInterface
+import com.alazar.base.core.NetworkProvider
 import com.alazar.base.util.CalendarUtil
 import com.alazar.base.util.LocationPermissionUtil
-import com.alazar.base.util.NetworkUtil
 import com.alazar.map.databinding.FragmentMapsBinding
 import com.alazar.map.di.MapComponentProvider
 import com.alazar.service.data.LocationData
@@ -41,6 +41,9 @@ class MapsFragment : Fragment(), View.OnClickListener {
 
     @Inject
     lateinit var userManager: UserManagerInterface
+
+    @Inject
+    lateinit var networkWrapper: NetworkProvider
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -99,7 +102,7 @@ class MapsFragment : Fragment(), View.OnClickListener {
         binding.fab.setOnClickListener(this)
         binding.logoutFab.setOnClickListener(this)
 
-        NetworkUtil.runNetworkConnectionMonitor(requireContext())
+        networkWrapper.runNetworkConnectionMonitor()
 
         return binding.root
     }

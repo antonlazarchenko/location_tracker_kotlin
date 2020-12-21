@@ -1,12 +1,11 @@
 package com.alazar.service
 
 import android.content.Context
-import android.net.ConnectivityManager
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.alazar.authfire.model.UserManagerInterface
-import com.alazar.base.util.NetworkUtil
+import com.alazar.base.core.NetworkProvider
 import com.alazar.service.data.LocationData
 import com.alazar.service.di.ServiceComponentProvider
 import com.orhanobut.hawk.Hawk
@@ -24,6 +23,9 @@ class FirebaseWorker(context: Context, params: WorkerParameters) : Worker(contex
     @Inject
     lateinit var user: UserManagerInterface
 
+    @Inject
+    lateinit var networkProvider: NetworkProvider
+
     private var dbFirebaseModel: DbFirebaseModel
 
     init {
@@ -37,10 +39,7 @@ class FirebaseWorker(context: Context, params: WorkerParameters) : Worker(contex
 
         Hawk.init(applicationContext).build()
 
-        val isConnected =
-            NetworkUtil(applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).isConnected()
-
-        if (Hawk.count() > 0 && isConnected) {
+        if (Hawk.count() > 0 && networkProvider.isConnected()) {
             GlobalScope.launch(Dispatchers.IO) {
                 val locations = withContext(Dispatchers.IO) { getLocationsList() }
 

@@ -12,7 +12,7 @@ import com.alazar.service.di.ServiceComponentProvider
 import javax.inject.Inject
 
 
-class RestartHelper {
+class RestartHelper @Inject constructor() : RestartHelperInterface {
 
     init {
         ServiceComponentProvider.getComponent().inject(this)
@@ -25,9 +25,12 @@ class RestartHelper {
     @Inject
     lateinit var user: UserManagerInterface
 
-    fun restartService(context: Context, serviceClass: Class<*>?) {
+    @Inject
+    lateinit var context: Context
+
+    override fun restartService(serviceClass: Class<*>?) {
         Log.d(TAG, "******* JOB: ATTEMPT TO RESTART TRACKER...")
-        if (checkPermission(context)) {
+        if (checkPermission()) {
             Handler(Looper.getMainLooper()).post {
                 Toast.makeText(
                     context,
@@ -43,14 +46,14 @@ class RestartHelper {
         }
     }
 
-    fun sendRestartBroadcast(context: Context) {
+    override fun sendRestartBroadcast() {
         val broadcastIntent = Intent()
         broadcastIntent.action = "restartService"
         broadcastIntent.setClass(context, ServiceRestart::class.java)
         context.sendBroadcast(broadcastIntent)
     }
 
-    fun checkPermission(context: Context): Boolean {
+    override fun checkPermission(): Boolean {
         Log.d(TAG, "******* checkPermissions")
         var status = true
         val preferences = context.getSharedPreferences(
@@ -66,5 +69,4 @@ class RestartHelper {
         }
         return status
     }
-
 }

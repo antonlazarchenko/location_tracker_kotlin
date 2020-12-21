@@ -1,17 +1,16 @@
 package com.alazar.base
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
-import android.net.ConnectivityManager
 import android.provider.Settings
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.location.LocationManagerCompat
-import com.alazar.base.util.NetworkUtil
+import com.alazar.base.core.NetworkProvider
+import javax.inject.Inject
 
 interface BaseActivityInterface {
     fun onActivityResultSuccess()
@@ -22,6 +21,9 @@ open class BaseActivity : AppCompatActivity(), BaseActivityInterface {
     companion object {
         const val TAG = "BaseActivity"
     }
+
+    @Inject
+    lateinit var networkProvider: NetworkProvider
 
     protected val requestMultiplePermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -38,9 +40,7 @@ open class BaseActivity : AppCompatActivity(), BaseActivityInterface {
         }
 
     protected open fun checkNetworkConnection() {
-        val connectivityManager =
-            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val isConnected = NetworkUtil(connectivityManager).isConnected()
+        val isConnected = networkProvider.isConnected()
 
         if (!isConnected) {
             val builder = AlertDialog.Builder(this)

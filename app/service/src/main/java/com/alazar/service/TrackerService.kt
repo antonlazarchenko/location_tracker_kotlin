@@ -2,7 +2,6 @@ package com.alazar.service
 
 import android.Manifest
 import android.app.*
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -20,7 +19,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.alazar.authfire.model.UserManagerInterface
-import com.alazar.base.util.NetworkUtil
+import com.alazar.base.core.NetworkProvider
 import com.alazar.service.data.LocationData
 import com.alazar.service.di.ServiceComponentProvider
 import com.google.android.gms.location.*
@@ -49,6 +48,12 @@ class TrackerService : Service(), LocationListener {
 
     @Inject
     lateinit var user: UserManagerInterface
+
+    @Inject
+    lateinit var networkProvider: NetworkProvider
+
+    @Inject
+    lateinit var restartHelper: RestartHelper
 
     private lateinit var dbFirebaseModel: DbFirebaseModel
 
@@ -136,7 +141,7 @@ class TrackerService : Service(), LocationListener {
 
     override fun onTaskRemoved(rootIntent: Intent) {
         Log.d(TAG, "TASK REMOVED")
-        RestartHelper().sendRestartBroadcast(this)
+        restartHelper.sendRestartBroadcast()
         super.onTaskRemoved(rootIntent)
     }
 
@@ -176,11 +181,11 @@ class TrackerService : Service(), LocationListener {
     override fun onLocationChanged(location: Location) {
         Log.d(TAG, "===== SERVICE LOCATION CHANGED")
 
-        if (!RestartHelper().checkPermission(this)) {
+        if (!restartHelper.checkPermission()) {
             stopSelf()
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
             Log.d(TAG, "====== SERVICE STOPPED by itself")
-        } else if (NetworkUtil(getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).isConnected()) {
+        } else if (networkProvider.isConnected()) {
 
             dbFirebaseModel.saveLocation(location)
 

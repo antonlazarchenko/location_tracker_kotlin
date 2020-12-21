@@ -3,6 +3,10 @@ package com.alazar.map.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.di.AuthUserModule
+import com.alazar.base.core.NetworkProvider
+import com.alazar.base.di.BaseApp
+import com.alazar.base.di.BaseComponent
+import com.alazar.base.di.BaseModule
 import com.alazar.base.di.scope.MapScope
 import com.alazar.base.di.viewmodel.ViewModelFactory
 import com.alazar.base.di.viewmodel.ViewModelKey
@@ -15,6 +19,9 @@ import dagger.multibindings.IntoMap
 
 @MapScope
 @Component(
+    dependencies = [
+        BaseComponent::class
+    ],
     modules = [
         MapModule::class,
         FactoryModule::class,
@@ -22,6 +29,7 @@ import dagger.multibindings.IntoMap
 )
 
 interface MapComponent {
+    fun provideNetworkProvider() : NetworkProvider
     fun inject(fragment: MapsFragment)
     fun inject(viewModel: MapViewModel)
 }
@@ -45,6 +53,7 @@ object MapComponentProvider {
     fun getComponent(): MapComponent {
         return DaggerMapComponent
             .builder()
+            .baseComponent(BaseApp.appComponent)
             .build()
     }
 }
