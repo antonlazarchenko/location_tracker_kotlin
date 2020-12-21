@@ -194,6 +194,9 @@ class MapsFragment : Fragment(), View.OnClickListener {
                         .setMessage(R.string.logout_confirmation)
                         .setPositiveButton(R.string.yes) { alert, id ->
                             userManager.signOut()
+
+                            requireActivity().supportFragmentManager.beginTransaction()
+                                .detach(this).commit()
                             requireActivity().recreate()
                         }
                         .setNegativeButton(getString(R.string.cancel)) { alert: DialogInterface, id: Int ->
