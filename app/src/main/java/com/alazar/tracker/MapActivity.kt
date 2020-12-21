@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import com.alazar.authfire.AuthActivity
 import com.alazar.authfire.model.UserManagerInterface
 import com.alazar.base.BaseActivity
@@ -28,18 +29,20 @@ class MapActivity : BaseActivity() {
         checkNetworkConnection()
         checkGpsConnection()
 
-        setContentView(R.layout.activity_map)
-
         binding = ActivityMapBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        Log.d("TAGGGGGGGGG", supportFragmentManager.fragments.toString())
+        Log.d("TAGGGGGGGGG", supportFragmentManager.backStackEntryCount.toString())
 
         if (!userManager.isAuthenticated()) {
             openPostActivity.launch(Intent(this, AuthActivity::class.java))
         } else {
-            loadLayout()
+            onActivityResultSuccess()
         }
     }
 
-    override fun loadLayout() {
+    override fun onActivityResultSuccess() {
         setContentView(binding.root)
         supportFragmentManager.beginTransaction()
             .replace(binding.frameLayout.id, MapsFragment())

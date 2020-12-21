@@ -14,7 +14,7 @@ import androidx.core.location.LocationManagerCompat
 import com.alazar.base.util.NetworkUtil
 
 interface BaseActivityInterface {
-    fun loadLayout()
+    fun onActivityResultSuccess()
 }
 
 open class BaseActivity : AppCompatActivity(), BaseActivityInterface {
@@ -33,7 +33,7 @@ open class BaseActivity : AppCompatActivity(), BaseActivityInterface {
     protected val openPostActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                loadLayout()
+                onActivityResultSuccess()
             }
         }
 
@@ -73,5 +73,5 @@ open class BaseActivity : AppCompatActivity(), BaseActivityInterface {
         }
     }
 
-    override fun loadLayout() {}
+    override fun onActivityResultSuccess() {}
 }

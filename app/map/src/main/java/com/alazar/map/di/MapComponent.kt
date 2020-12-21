@@ -1,6 +1,5 @@
 package com.alazar.map.di
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.di.AuthUserModule
@@ -42,17 +41,10 @@ abstract class FactoryModule {
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }
 
-class MapApp : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-        appComponent = DaggerMapComponent
+object MapComponentProvider {
+    fun getComponent(): MapComponent {
+        return DaggerMapComponent
             .builder()
             .build()
-    }
-
-    companion object {
-        lateinit var appComponent: MapComponent
     }
 }

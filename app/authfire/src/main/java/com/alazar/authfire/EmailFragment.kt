@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.databinding.FragmentEmailBinding
-import com.alazar.authfire.di.AuthApp
+import com.alazar.authfire.di.AuthComponentProvider
 import com.alazar.authfire.util.Validator
 import com.alazar.authfire.viewmodel.EmailViewModel
 import com.alazar.base.BaseFragment
@@ -37,7 +37,7 @@ class EmailFragment : BaseFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        AuthApp.appComponent.inject(this)
+        AuthComponentProvider.getComponent().inject(this)
 
         viewModel = ViewModelProvider(
             requireActivity(),

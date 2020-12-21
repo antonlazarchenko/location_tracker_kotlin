@@ -9,14 +9,13 @@ import com.alazar.base.core.PreferenceProvider
 import com.alazar.base.di.BaseApp
 import javax.inject.Inject
 
-class SharedPrefWrapper @Inject constructor(private val context: Context) : PreferenceProvider {
+class SharedPrefWrapper @Inject constructor() : PreferenceProvider {
 
-//    @Inject
-//    lateinit var context: Context
+    @Inject
+    lateinit var context: Context
 
     init {
-//        BaseApp.appComponent.inject(this)
-        Log.d("************ CONTEXT", context.toString())
+        BaseApp.appComponent.inject(this)
     }
 
     private var preferences: SharedPreferences = context.getSharedPreferences(

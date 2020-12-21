@@ -22,7 +22,7 @@ import androidx.work.WorkManager
 import com.alazar.authfire.model.UserManagerInterface
 import com.alazar.base.util.NetworkUtil
 import com.alazar.service.data.LocationData
-import com.alazar.service.di.ServiceApp
+import com.alazar.service.di.ServiceComponentProvider
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.orhanobut.hawk.Hawk
@@ -57,7 +57,7 @@ class TrackerService : Service(), LocationListener {
     override fun onCreate() {
         super.onCreate()
 
-        ServiceApp.appComponent.inject(this)
+        ServiceComponentProvider.getComponent().inject(this)
 
         dbFirebaseModel = DbFirebaseModel(user.getUserId().toString())
         Log.d(TAG, user.getUserId().toString())

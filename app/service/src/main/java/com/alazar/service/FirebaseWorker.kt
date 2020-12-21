@@ -8,7 +8,7 @@ import androidx.work.WorkerParameters
 import com.alazar.authfire.model.UserManagerInterface
 import com.alazar.base.util.NetworkUtil
 import com.alazar.service.data.LocationData
-import com.alazar.service.di.ServiceApp
+import com.alazar.service.di.ServiceComponentProvider
 import com.orhanobut.hawk.Hawk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -27,7 +27,7 @@ class FirebaseWorker(context: Context, params: WorkerParameters) : Worker(contex
     private var dbFirebaseModel: DbFirebaseModel
 
     init {
-        ServiceApp.appComponent.inject(this)
+        ServiceComponentProvider.getComponent().inject(this)
 
         dbFirebaseModel = DbFirebaseModel(user.getUserId().toString())
     }

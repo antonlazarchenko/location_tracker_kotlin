@@ -1,6 +1,5 @@
 package com.alazar.service.di
 
-import android.app.Application
 import com.alazar.authfire.di.AuthUserModule
 import com.alazar.base.di.BaseModule
 import com.alazar.base.di.scope.ServiceScope
@@ -26,18 +25,10 @@ interface ServiceComponent {
 @Module(includes = [AuthUserModule::class, BaseModule::class])
 class MainModule
 
-class ServiceApp : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-        appComponent = DaggerServiceComponent
+object ServiceComponentProvider {
+    fun getComponent(): ServiceComponent {
+        return DaggerServiceComponent
             .builder()
-            .baseModule(BaseModule(this))
             .build()
-    }
-
-    companion object {
-        lateinit var appComponent: ServiceComponent
     }
 }

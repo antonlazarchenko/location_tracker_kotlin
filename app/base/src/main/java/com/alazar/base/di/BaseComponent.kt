@@ -24,24 +24,31 @@ interface BaseComponent {
 @Module
 class BaseModule constructor(private val application: Application) {
     @Provides
-    fun provideContext() : Context = application.applicationContext
+    fun provideContext(): Context = application.applicationContext
 
     @Provides
-    fun provideSharedPreferences() : PreferenceProvider = SharedPrefWrapper(application.applicationContext)
+    fun provideSharedPreferences(): PreferenceProvider = SharedPrefWrapper()
 }
 
-class BaseApp : Application() {
+open class BaseApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
-        appComponent = DaggerBaseComponent
-            .builder()
-            .baseModule(BaseModule(this))
-            .build()
+        getComponent(this).inject(this)
     }
 
     companion object {
         lateinit var appComponent: BaseComponent
+
+        fun getComponent(app: Application): BaseComponent {
+            if (!::appComponent.isInitialized) {
+                appComponent = DaggerBaseComponent
+                    .builder()
+                    .baseModule(BaseModule(app))
+                    .build()
+            }
+            return appComponent
+        }
     }
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alazar.authfire.model.UserManagerInterface
-import com.alazar.map.di.MapApp
+import com.alazar.map.di.MapComponentProvider
 import com.alazar.service.DbFirebaseModel
 import com.alazar.service.data.LocationData
 import javax.inject.Inject
@@ -20,7 +20,7 @@ class MapViewModel @Inject constructor() : ViewModel()  {
     private val locations = MutableLiveData<ArrayList<LocationData>>()
 
     init {
-        MapApp.appComponent.inject(this)
+        MapComponentProvider.getComponent().inject(this)
 
         model = DbFirebaseModel(user.getUserId().toString())
     }

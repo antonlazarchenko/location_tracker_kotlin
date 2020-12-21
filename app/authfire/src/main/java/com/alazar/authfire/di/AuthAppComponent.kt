@@ -1,6 +1,5 @@
 package com.alazar.authfire.di
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.EmailFragment
@@ -9,8 +8,8 @@ import com.alazar.authfire.model.UserManagerInterface
 import com.alazar.authfire.model.UserModel
 import com.alazar.authfire.viewmodel.EmailViewModel
 import com.alazar.authfire.viewmodel.PhoneViewModel
+import com.alazar.base.di.BaseApp
 import com.alazar.base.di.BaseComponent
-import com.alazar.base.di.DaggerBaseComponent
 import com.alazar.base.di.scope.AuthScope
 import com.alazar.base.di.viewmodel.ViewModelFactory
 import com.alazar.base.di.viewmodel.ViewModelKey
@@ -59,18 +58,12 @@ abstract class FactoryModule {
 
 }
 
-class AuthApp : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-        appComponent = DaggerAuthAppComponent
+object AuthComponentProvider {
+    fun getComponent(): AuthAppComponent {
+        return DaggerAuthAppComponent
             .builder()
-            .baseComponent(DaggerBaseComponent.builder().build())
+            .baseComponent(BaseApp.appComponent)
             .build()
     }
-
-    companion object {
-        lateinit var appComponent: AuthAppComponent
-    }
 }
+

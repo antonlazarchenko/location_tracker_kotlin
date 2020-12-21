@@ -20,7 +20,7 @@ import com.alazar.base.util.CalendarUtil
 import com.alazar.base.util.LocationPermissionUtil
 import com.alazar.base.util.NetworkUtil
 import com.alazar.map.databinding.FragmentMapsBinding
-import com.alazar.map.di.MapApp
+import com.alazar.map.di.MapComponentProvider
 import com.alazar.service.data.LocationData
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -62,6 +62,8 @@ class MapsFragment : Fragment(), View.OnClickListener {
 
     private val callback = OnMapReadyCallback { googleMap ->
         map = googleMap
+        map.setMinZoomPreference(8.0f)
+        map.setMaxZoomPreference(20.0f)
 
         todayMillis = CalendarUtil.getTodayStartTimeMillis()
         dateMillis = CalendarUtil.getTodayStartTimeMillis()
@@ -77,7 +79,7 @@ class MapsFragment : Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        MapApp.appComponent.inject(this)
+        MapComponentProvider.getComponent().inject(this)
 
         binding = FragmentMapsBinding.inflate(inflater, container, false)
 
@@ -109,19 +111,19 @@ class MapsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun onResult(locationDataArrayList: ArrayList<LocationData>) {
-        hideProgressBar()
 
-        map.setMinZoomPreference(8.0f)
-        map.setMaxZoomPreference(20.0f)
+        hideProgressBar()
 
         if (locationDataArrayList.size > 0) {
 
             setMarkers(locationDataArrayList, dateMillis == todayMillis)
         } else {
-            Toast.makeText(context, R.string.nothing_to_show, Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.nothing_to_show, Toast.LENGTH_SHORT)
+                .show()
 
             detectMyLastLocation()
         }
+
     }
 
     private fun setMarkers(locationDataArrayList: ArrayList<LocationData>, maxZoom: Boolean) {

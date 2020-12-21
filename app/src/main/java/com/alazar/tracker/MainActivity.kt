@@ -10,6 +10,7 @@ import com.alazar.authfire.AuthActivity
 import com.alazar.authfire.model.UserManagerInterface
 import com.alazar.base.BaseActivity
 import com.alazar.base.core.PreferenceProvider
+import com.alazar.base.di.BaseApp
 import com.alazar.service.TrackerService
 import com.alazar.tracker.databinding.ActivityMainBinding
 import com.alazar.tracker.di.MainApp
@@ -43,11 +44,16 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         if (!userManager.isAuthenticated()) {
             openPostActivity.launch(Intent(this, AuthActivity::class.java))
         } else {
-            setContentView(binding.root)
-            changeStatus(preferences.getServiceStatus())
+            onActivityResultSuccess()
         }
     }
 
+    override fun onActivityResultSuccess() {
+        super.onActivityResultSuccess()
+
+        setContentView(binding.root)
+        changeStatus(preferences.getServiceStatus())
+    }
 
     override fun onClick(v: View) {
         when (v.id) {

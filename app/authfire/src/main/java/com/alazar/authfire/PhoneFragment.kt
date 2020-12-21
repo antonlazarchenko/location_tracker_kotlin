@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.alazar.authfire.databinding.FragmentPhoneBinding
-import com.alazar.authfire.di.AuthApp
+import com.alazar.authfire.di.AuthComponentProvider
 import com.alazar.authfire.model.PhoneAuthState
 import com.alazar.authfire.util.Validator
 import com.alazar.authfire.viewmodel.PhoneViewModel
@@ -39,7 +39,7 @@ class PhoneFragment : BaseFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        AuthApp.appComponent.inject(this)
+        AuthComponentProvider.getComponent().inject(this)
 
         updateUI(PhoneAuthState.STATE_INITIALIZED)
 

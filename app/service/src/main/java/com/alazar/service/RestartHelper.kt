@@ -8,14 +8,14 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import com.alazar.authfire.model.UserManagerInterface
-import com.alazar.service.di.ServiceApp
+import com.alazar.service.di.ServiceComponentProvider
 import javax.inject.Inject
 
 
 class RestartHelper {
 
     init {
-        ServiceApp.appComponent.inject(this)
+        ServiceComponentProvider.getComponent().inject(this)
     }
 
     companion object {
