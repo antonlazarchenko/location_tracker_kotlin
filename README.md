@@ -29,3 +29,7 @@ If no internet available service will collect all available location data and se
   - /base
   - /map
   - /service
+  
+# My other projects
+[RSS feed aggregator](https://github.com/antonlazarchenko/rss_aggregator)
+
